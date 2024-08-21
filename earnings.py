@@ -41,6 +41,10 @@ def single_job():
     df_yearly, df_quarterly = process_earnings(data_j)
     functions.upload_to_aws_s3(df_yearly, "earnings-dataset", "Yearly/AAPL_Earnings.csv")
     functions.upload_to_aws_s3(df_quarterly, "earnings-dataset", "Quarterly/AAPL_Earnings.csv")
+    df_quarterly = functions.get_data_from_s3("earnings-dataset", "Quarterly/AAPL_Earnings.csv")
+    df_yearly = functions.get_data_from_s3("earnings-dataset", "Yearly/AAPL_Earnings.csv")
+    functions.import_data_to_sql('earnings', df_quarterly, 'aapl_quarterly')
+    functions.import_data_to_sql('earnings', df_yearly, 'aapl_yearly')
 
 
 single_job()

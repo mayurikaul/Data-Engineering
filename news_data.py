@@ -26,6 +26,8 @@ def single_job():
     data_j = functions.get_raw_data_from_json("AAPL_news.json")
     df_news = process_raw_news_data(data_j)
     functions.upload_to_aws_s3(df_news, 'news-dataset', 'AAPL-news.csv')
+    df_news = functions.get_data_from_s3('news-dataset', 'AAPL-news.csv')
+    functions.import_data_to_sql('news_data', df_news, 'aapl_news')
 
 
 single_job()

@@ -74,15 +74,17 @@ def process_transcript_details(data):
    return df_transcript
 
 
-def get_transcript_details():
+def get_transcript():
    raw_transcript_av = get_raw_transcript_details(url2, "4709458")
    functions.upload_raw_data_to_json_temp_store(raw_transcript_av, "AAPL_2024_Q3.json")
    raw_transcript_json = functions.get_raw_data_from_json("AAPL_2024_Q3.json")
    df_transcript = process_transcript_details(raw_transcript_json)
    functions.upload_to_aws_s3(df_transcript, 'transcript-reports', 'AAPL-2024-Q3.csv')
+   df_transcript = functions.get_data_from_s3('transcript-reports', 'AAPL-2024-Q3.csv')
+   functions.import_data_to_sql('transcripts', df_transcript, 'aapl_transcripts')
 
    
-get_transcript_details()
+get_transcript()
 
 #To-do:
 

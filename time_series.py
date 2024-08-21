@@ -5,6 +5,7 @@ import os
 from io import StringIO
 import boto3
 import functions
+from sqlalchemy import create_engine
 
 #This code is for one ticker AAPL
 
@@ -26,6 +27,8 @@ def single_job():
     data_j = functions.get_raw_data_from_json('AAPLtimeseries.json')
     df = process_raw_time_series_data(data_j)
     functions.upload_to_aws_s3(df, 'time-seriesdata', 'AAPL_Time_Series.csv')
+    df = functions.get_data_from_s3('time-seriesdata', 'AAPL_Time_Series.csv')
+    functions.import_data_to_sql('timeseries', df, 'aapl_timeseries')
 
 
 single_job()
