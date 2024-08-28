@@ -47,6 +47,4 @@ single_job()
 #       job_config = AlphaVantageNewsJob(start_date=start_date, end_date=end_date, ticker=ticker)
 
 
-#Next up: retrieve_data_and_upload_to_sql_db()
-
 #For file names (random number generator): import uuid 
