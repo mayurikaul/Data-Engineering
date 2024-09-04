@@ -5,6 +5,7 @@ import os
 from io import StringIO
 import boto3
 from sqlalchemy import create_engine
+import pyodbc
 
 
 def get_alpha_vantage_raw_data(url):
@@ -49,13 +50,27 @@ def get_data_from_s3(bucketname:str, filename:str):
     return df
 
 
+# def clean_column_names(columns):
+#     cleaned_columns = []
+#     for col in columns:
+#         col = col.strip()
+#         col = col.replace(' ', '_').replace('.','_')
+#         col = '_'.join(filter(None, col.split('_')))
+#         if col[0].isdigit():
+#             col = 'col' + col
+#         cleaned_columns.append(col)
+#     return cleaned_columns
+
+
 def import_data_to_sql(sql_database:str, df, sql_table:str):
-    username = 'root'
-    password = 'OldRectory1!'
-    host = 'localhost' 
-    port = '3306' 
-    database_in_sql = sql_database
-    connection_string = f'mysql+pymysql://{username}:{password}@{host}:{port}/{database_in_sql}'
+    username = 'sa'
+    password = 'OldRectory1'
+    #host = 'localhost' 
+    server = 'localhost'
+    driver = 'ODBC Driver 17 for SQL Server'
+    #port = '1433' 
+    #connection_string = f'mysql+pymysql://{username}:{password}@{host}:{port}/{sql_database}'
+    connection_string = f"mssql+pyodbc://{username}:{password}@{server}/{sql_database}?driver={driver}"
     engine = create_engine(connection_string)
     try:
         connection = engine.connect()
@@ -64,5 +79,7 @@ def import_data_to_sql(sql_database:str, df, sql_table:str):
     except Exception as e:
         print(f"Error connecting to the database: {e}")
 
-    df.to_sql(sql_table, con=engine, if_exists='replace', index=False)
+    df.to_sql(sql_table, con=engine, if_exists='append', index=False)
+
+
 
