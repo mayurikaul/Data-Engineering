@@ -1,0 +1,2 @@
+action_type,new_id,old_id,new_date,old_date,new_open,old_open,new_high,old_high,new_low,old_low,new_close,old_close,new_volume,old_volume,new_inserted_at,old_inserted_at
+INSERT,102,,13/09/2024,,223.58,,224.04,,221.91,,222.5,,36766619,,14/09/2024 10:47,
